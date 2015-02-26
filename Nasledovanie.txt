@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <windows.h>
+using namespace std;
+
+class Student{
+private:
+	
+public:
+	string Name;
+	string SurName;
+	int Age;
+	Student()
+	{
+		Name = " ";
+		SurName = " ";
+		Age = 0;	
+	}
+
+	Student(string name, string surname, int age)
+	{
+		Name = name;
+		SurName = surname;
+		Age = age;
+	}
+
+	virtual string GetName()
+	{
+		return Name;
+	
+	}
+
+
+	virtual void Show()
+	{
+		cout << "Student name: " << this->Name << endl;
+		cout << "Studen surname: " << this->SurName << endl;
+		cout << "Student age is: " << this->Age << endl;
+	}
+};
+
+class Aspirant : protected Student
+{
+private:
+	int DateOfDisertation;
+	string Discipline;
+public:
+	Aspirant(): DateOfDisertation(0), Discipline(" "), Student(){};
+
+	Aspirant(string name, string surname, int age, int dateofdisertation, string discipline) : 
+		Student(name, surname, age)
+	{
+		DateOfDisertation = dateofdisertation;
+		Discipline = discipline;
+	}
+
+	virtual void Show()
+	{
+		cout << "Name aspirant: " << this->Name << endl;
+		cout << "Studen surname: " << this->SurName << endl;
+		cout << "Student age is: " << this->Age << endl;
+		cout << "Disertation date: " << this->DateOfDisertation << endl;
+		cout << "Tematic: " << this->Discipline << endl;
+	}
+
+
+
+};
