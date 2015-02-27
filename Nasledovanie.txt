@@ -40,7 +40,7 @@ public:
 	}
 };
 
-class Aspirant : protected Student
+class Aspirant : public Student
 {
 private:
 	int DateOfDisertation;
@@ -57,13 +57,152 @@ public:
 
 	virtual void Show()
 	{
-		cout << "Name aspirant: " << this->Name << endl;
-		cout << "Studen surname: " << this->SurName << endl;
-		cout << "Student age is: " << this->Age << endl;
 		cout << "Disertation date: " << this->DateOfDisertation << endl;
 		cout << "Tematic: " << this->Discipline << endl;
 	}
-
-
-
 };
+
+//======================Класс паспорт=========================================
+
+class Passport
+{
+private:
+	string Name;
+	string SurName;
+	string Nationality;
+	string CityOfBirth;
+	int Age;
+public:
+	Passport()
+	{
+		Name = " ";
+		SurName = " ";
+		Nationality = " ";
+		CityOfBirth = " ";
+		Age = 0;	
+	}
+	
+	Passport(string Name, string SurName, string Nationality, string CityOfBirth, int Age)
+	{
+		this->Name = Name;
+		this->SurName = SurName;
+		this->Nationality = Nationality;
+		this->CityOfBirth = CityOfBirth;
+		this->Age = Age;
+	}
+
+	~Passport(){}
+
+	string GetName()
+	{
+		return Name;	
+	}
+
+	string GetSurName()
+	{
+		return SurName;
+	}
+
+	string GetNationality()
+	{
+		return Nationality;
+	}
+
+	string GetCityOfBirth()
+	{
+		return CityOfBirth;
+	}
+
+	int GetAge()
+	{
+		return Age;
+	}
+
+	void Show()
+	{
+		cout << "Name: " << this->GetName() << endl;
+		cout << "SurName: " << this->GetSurName() << endl;
+		cout << "Nationality: " << this->GetNationality() << endl;
+		cout << "City of Birth: " << this->GetCityOfBirth() << endl;
+		cout << "Age: " << this->GetAge() << endl;
+	}
+};
+
+class ForeignPassport : public Passport
+{
+private:
+	int CountOfVisa;
+	int Id;
+	string CountryVisa;
+public:
+	ForeignPassport(): CountOfVisa(0), Id(0), CountryVisa(" "), Passport(){};
+
+	ForeignPassport(string Name, string SurName, string Nationality, 
+		string CityOfBirth, int Age, int CountOfVisa, int Id, string CountryVisa) : 
+		Passport(Name, SurName, Nationality, CityOfBirth, Age)
+	{
+		this->CountOfVisa = CountOfVisa;
+		this->Id = Id;
+		this->CountryVisa = CountryVisa;
+	}
+
+	int GetCount()
+	{
+		return CountOfVisa;
+	}
+
+	int GetId()
+	{
+		return Id;
+	}
+
+	string GetCountry()
+	{
+		return CountryVisa;
+	}
+
+	void ForeignShow()
+	{
+		cout << "Name: " << GetName() << endl;
+		cout << "SurName: " << GetSurName() << endl;
+		cout << "Nationality: " << GetNationality() << endl;
+		cout << "City of Birth: " << GetCityOfBirth() << endl;
+		cout << "Age: " << GetAge() << endl;
+		cout << "Count open visa is: " << this->GetCount() << endl;
+		cout << "Id your visa: " << this->GetId() << endl;
+		cout << "Country of visa: " << this->GetCountry() << endl;
+	}
+};
+
+
+
+
+
+void main()
+{
+	
+
+	setlocale(LC_ALL, "Russian");
+	/*Student Group("Sd", "Der", 30);
+	Group.Show();
+	
+	cout << endl;
+
+	
+	Aspirant G;
+
+	Student* ptrA = NULL;
+	ptrA = &G;
+
+	G.Show();*/
+	
+	Passport first("John", "Oppen", "American", "Detroit", 30);
+
+	first.Show();
+	first.~Passport();
+
+	ForeignPassport second("John", "Oppen", "American", "Detroit", 30,23, 2334344, "Ukraine");
+
+	second.ForeignShow();
+
+}
