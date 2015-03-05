@@ -1,0 +1,253 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <string>
+#include <windows.h>
+#include <io.h>
+#include <stdio.h>
+#include <conio.h>
+#include <random>
+#include <time.h>
+
+using namespace std;
+
+class Submarine
+{
+private:
+	string Name;
+	string arr[4];
+	int Health;
+	int MaxHealth;
+	int Torpedo;
+	int MaxTorpedo;
+	double Oil;
+	double Oilmax;
+	int XP;
+	int MaxXP;
+public:
+	Submarine()
+	{
+		Name = "Red October";
+		arr[0] = "Ammator";
+		arr[1] = "Squaddie";
+		arr[2] = "Hardened";
+		arr[3] = "Hunter";
+		Health = MaxHealth = 100;
+		Torpedo = MaxTorpedo = 10;
+		Oil = Oilmax = 20.0;
+		XP = 0;
+		MaxXP = 100;
+	}
+
+	/*Submarine(string name, int torpedo, double oil, double oilmax)
+	{
+		Name = name;
+		Torpedo = torpedo;
+		Oil = oil;
+		Oilmax = oilmax;
+	}*/
+
+	~Submarine(){}
+
+	void setName(string name)
+	{
+		Name = name;
+	}
+
+	string getName()
+	{
+		return Name;
+	}
+
+
+	int getHealth()
+	{
+		return Health;
+	}
+
+	int getMaxHealth()
+	{
+		return MaxHealth;
+	}
+
+	int getTorpedo()
+	{
+		return Torpedo;
+	}
+
+	int getMaxTorpedo()
+	{
+		return MaxTorpedo;
+	}
+
+	string getRank()
+	{
+		return arr[0];
+	}
+
+	double getOil()
+	{
+		return Oil;
+	}
+
+	double getMaxOil()
+	{
+		return Oilmax;
+	}
+
+	int getXP()
+	{
+		return XP;
+	}
+
+	int getMaxXP()
+	{
+		return MaxXP;
+	}
+
+	void ShowStat(/*string &Name, string arr[], int &Health, int &MaxHealth,
+		int &Torpedo, int &MaxTorpedo, double &Oil, double &Oilmax, int &XP, int &MaxXP*/)
+	{
+		cout << "Имя подводной лодки: " << getName() << ". Ваш ранг: " << getRank() << endl;
+		cout << "Текущий опыт/Опыта до уровня: " << getXP() << "/" << getMaxXP() - getXP() << endl;
+		cout << "Текущее здоровье/Максимальное здоровье: " << getHealth() << "/" << getMaxHealth() << endl;
+		cout << "Количество оставшихся торпед/Максимальное количество торпед: " << getTorpedo() << "/" << getMaxTorpedo() << endl;
+		cout << "Оставшееся горючее/Максимальное количество горючего: " << getOil() << "/" << getMaxOil() << endl;		
+	}
+	
+	void Ships()
+	{		
+		int temp = 10;
+				
+		srand(time(NULL));
+
+		temp = rand()%4;
+
+		if(temp == 0)
+		{
+			cout << "Ваш враг: Танкер" << endl;
+			cout << "Количество его жизней: 20" << endl;	
+		}
+
+		if(temp == 1)
+		{
+			cout << "Ваш враг: Катер" << endl;
+			cout << "Количество его жизней: 40" << endl;	
+		}
+
+		if(temp == 2)
+		{
+			cout << "Ваш враг: Крейсер" << endl;
+			cout << "Количество его жизней: 80" << endl;	
+		}
+
+		if(temp == 3)
+		{
+			cout << "Ваш враг: Миноносец" << endl;
+			cout << "Количество его жизней: 120" << endl;	
+		}	
+	}
+
+	void Sonar()
+	{
+		Sleep(2000);
+
+	
+	
+	}
+
+};
+
+
+
+
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	/*string Menu[3] = {"Создать новую лодку", "Продолжить сохраненную игру", "Выход"}, dir;
+	int pointer = 0;
+
+
+	while(true)
+	{
+		system("cls");
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+		cout << "Choose menu - up, duwn.\t ENTER for apply\n\n";
+
+		for(int i = 0; i < 3; ++i)
+		{
+			if(i == pointer)
+			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
+				
+				cout << Menu[i] << endl;	
+			}
+			else{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+				cout << Menu[i] << endl;
+			}
+		}
+
+		while(true)
+		{
+			if(GetAsyncKeyState(VK_UP) != 0)
+			{
+				pointer -= 1;
+				if(pointer == -1)
+				{
+					pointer = 2;		
+				}
+				break;	
+			}
+			else if(GetAsyncKeyState(VK_DOWN) != 0)
+			{
+				pointer += 1;
+				if(pointer == 3)
+				{
+					pointer = 0;				
+				}
+				break;
+			}
+
+			else if(GetAsyncKeyState(VK_RETURN) != 0)
+			{
+				switch(pointer)
+				{
+				case 0:
+					
+				
+				case 1:
+					
+				break;
+					 break;
+				
+				case 2:
+					{
+						return 0;
+					} break;
+				} break;
+			}
+		}
+
+		Sleep(150);
+	}*/
+
+	Submarine A;
+
+	//A.ShowStat();
+
+	A.Ships();
+
+
+
+
+
+
+
+
+	_getch();
+	return 0;
+}
