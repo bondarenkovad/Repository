@@ -7,14 +7,18 @@
 #include <conio.h>
 #include <random>
 #include <time.h>
+#include <map>
+#include <cstring>
 
 using namespace std;
+
+int chance = 10;
+int moved = 0;
 
 class Submarine
 {
 private:
 	string Name;
-	string arr[4];
 	int Health;
 	int MaxHealth;
 	int Torpedo;
@@ -23,19 +27,33 @@ private:
 	double Oilmax;
 	int XP;
 	int MaxXP;
+	char* rank;
+	char* Rank[4];
+	string Ship[4];
+	string ship;
+	int shiphealth;
+	//int distance;
 public:
 	Submarine()
 	{
 		Name = "Red October";
-		arr[0] = "Ammator";
-		arr[1] = "Squaddie";
-		arr[2] = "Hardened";
-		arr[3] = "Hunter";
+		rank = "Ammator";
+		Rank[0] = "Ammator";
+		Rank[1]	= "Squaddie";
+		Rank[2] = "Hardened";
+		Rank[3] = "Hunter";
+		Ship[0] = "Танкер";
+		Ship[1] = "Катер";
+		Ship[2] = "Крейсер";
+		Ship[3] = "Миноносец";
+		ship = " ";
+		shiphealth = 0;
 		Health = MaxHealth = 100;
 		Torpedo = MaxTorpedo = 10;
-		Oil = Oilmax = 20.0;
+		Oil = Oilmax = 60.0;
 		XP = 0;
 		MaxXP = 100;
+		//distance = 0;
 	}
 
 	/*Submarine(string name, int torpedo, double oil, double oilmax)
@@ -59,9 +77,19 @@ public:
 	}
 
 
+	void setHealth(int h)
+	{
+		Health = h;
+	}
+
 	int getHealth()
 	{
 		return Health;
+	}
+
+	void setMaxHealth(int mh)
+	{
+		MaxHealth = mh;
 	}
 
 	int getMaxHealth()
@@ -79,10 +107,8 @@ public:
 		return MaxTorpedo;
 	}
 
-	string getRank()
-	{
-		return arr[0];
-	}
+	
+
 
 	double getOil()
 	{
@@ -104,11 +130,35 @@ public:
 		return MaxXP;
 	}
 
-	void ShowStat(/*string &Name, string arr[], int &Health, int &MaxHealth,
-		int &Torpedo, int &MaxTorpedo, double &Oil, double &Oilmax, int &XP, int &MaxXP*/)
+	void CheckXP(const char* Rank, const char* rank)
 	{
-		cout << "Имя подводной лодки: " << getName() << ". Ваш ранг: " << getRank() << endl;
-		cout << "Текущий опыт/Опыта до уровня: " << getXP() << "/" << getMaxXP() - getXP() << endl;
+		if( XP >= MaxXP )
+		{		
+			if( strcmp(rank, &Rank[0]) != 0 )
+			{
+				rank = "Squaddie";
+				Torpedo += 5;
+				MaxTorpedo += 5;
+			}
+			else if( strcmp(rank, &Rank[1]) != 0)
+			{
+				rank = "Hardened";
+				Health += 20;
+				MaxHealth += 20;
+			}
+			else if( strcmp(rank, &Rank[2]) != 0)
+			{
+				rank = "Hunter";
+				Oilmax += 20.0;
+				Oil += 20.0;
+			}
+		}
+	}
+
+	void ShowStat()
+	{
+		cout << "Имя подводной лодки: " << getName() << ". Ваш ранг: " << rank << endl;
+		cout << "Текущий опыт/Опыта до уровня: " << getXP() << "/" << getMaxXP() << endl;
 		cout << "Текущее здоровье/Максимальное здоровье: " << getHealth() << "/" << getMaxHealth() << endl;
 		cout << "Количество оставшихся торпед/Максимальное количество торпед: " << getTorpedo() << "/" << getMaxTorpedo() << endl;
 		cout << "Оставшееся горючее/Максимальное количество горючего: " << getOil() << "/" << getMaxOil() << endl;		
@@ -117,7 +167,6 @@ public:
 	void Ships()
 	{		
 		int temp = 10;
-				
 		srand(time(NULL));
 
 		temp = rand()%4;
@@ -125,36 +174,215 @@ public:
 		if(temp == 0)
 		{
 			cout << "Ваш враг: Танкер" << endl;
-			cout << "Количество его жизней: 20" << endl;	
+			cout << "Количество его жизней: 20" << endl;
+			ship = "Танкер";
+			shiphealth = 20;
 		}
 
 		if(temp == 1)
 		{
 			cout << "Ваш враг: Катер" << endl;
-			cout << "Количество его жизней: 40" << endl;	
+			cout << "Количество его жизней: 40" << endl;
+			ship = "Катер";
+			shiphealth = 40;
 		}
 
 		if(temp == 2)
 		{
 			cout << "Ваш враг: Крейсер" << endl;
-			cout << "Количество его жизней: 80" << endl;	
+			cout << "Количество его жизней: 80" << endl;
+			ship = "Крейсер";
+			shiphealth = 80;
 		}
 
 		if(temp == 3)
 		{
 			cout << "Ваш враг: Миноносец" << endl;
-			cout << "Количество его жизней: 120" << endl;	
-		}	
+			cout << "Количество его жизней: 120" << endl;
+			ship = "Миноносец";
+			shiphealth = 120;
+		}
 	}
+
+	int DistanceToTarget()
+	{
+		int distance;		
+
+		srand(time(NULL));
+
+		distance = 100 + rand()%100;
+		
+		return distance;
+	}
+
+	double Refiling()
+	{
+		Oil = Oilmax;
+		return Oil;
+	}
+
+	int Healing()
+	{
+		Health = MaxHealth;
+		return Health;
+	}
+
+	void Move()
+	{
+		int  move = 0, choice = 0; 
+		double dist = 0.0;
+		cout << "Оставшееся горючее/Максимальное количество горючего: " << getOil() << "/" << getMaxOil() << endl;		
+		cout << "Расстояние до цели: " << DistanceToTarget()  << " мили."<< endl;
+		
+		cout << "Введите расстояние, на которое нужно плыть:" << endl;
+		cin >> move;
+		moved = move;
+		 dist = move * 0.2;
+
+		 Oil = Oil - dist;
+
+		
+
+		/* while(move != DistanceToTarget() )
+		 {			 
+				cout << "Вы не попадете к кораблю противника!!! Введите правильное расстояние: " << endl;
+				cin >> move;
+				if( move == DistanceToTarget() )
+					return;
+		 }*/
+
+		 if(dist > Oil)
+		 {
+			cout << "Горючего не хватает! Нажмите 2, что бы вызвать танкер!" << endl;
+			
+			while(choice != 2)
+			{
+				cin >> choice;
+			}
+
+			if(choice == 2)
+			{
+				cout << "Начинаем заправку..." << endl;
+				Sleep(2000);
+				Refiling();
+				Healing();
+				cout << "Заправка прошла успешно!!!" << endl;
+			} 
+		 }
+		 else
+		 {
+			 cout << "Плывем на место..." << endl;
+			 Sleep(2000);
+			 cout << "Оставшееся горючее/Максимальное количество горючего: " << Oil << "/" << Oilmax << endl;
+		 }
+		
+	}
+
 
 	void Sonar()
 	{
+		cout << "Сканирую на поиск целей..." << endl;
 		Sleep(2000);
 
-	
-	
+		Ships();
+		cout << "Расстояние до цели: " << DistanceToTarget() << endl;
 	}
 
+	void ShowHealth()
+	{
+		system("cls");
+		cout << "Ваш противник: " << ship << endl;
+		cout << "Ваши жизни: " << Health << "/" << MaxHealth << "\t\t\t" << "Жизни противника: " << shiphealth << endl;
+		cout << "====================================================" << endl;
+	}
+
+	
+
+
+	void Attack()
+	{
+		srand(time(NULL));
+
+		CheckXP(Rank[4], rank);
+
+		do{
+		ShowHealth();
+		cout << "Вы атакуете!" << endl;
+
+		Torpedo = Torpedo - 1;
+		shiphealth -= 20;
+		Sleep(1000);
+		ShowHealth();
+		if(ship == "Танкер")
+			break;
+		else
+		{
+			cout << "Стреляет противник!!!" << endl;
+			Sleep(1000);
+			chance = rand()%2;
+
+			if(chance == 0)
+			{
+				cout << "Противник промахнулся!!!"	<< endl;
+			}
+			else if(chance == 1)
+			{
+				cout << "Противник попал!!!!" << endl;
+				Health = Health - 20;
+			}
+			else
+			{
+				cout << "Противник промахнулся!!!"	<< endl;
+			}
+		}
+
+		if(Health <= 0 || shiphealth <= 0)
+			break;		
+		Sleep(1000);
+		
+
+		}while( (Health >= 0) || (shiphealth >= 0) );
+			
+
+		if(Health == 0)
+			{
+				cout << "Вашу подводную лодку уничтожили!!!!!" << endl;
+				cout << "Игра окончена!!!" << endl;
+				return;
+			}
+
+			if(shiphealth == 0)
+			{
+				cout << "Вы уничтожили противника!!!!" << endl;
+
+				if(ship == "Танкер")
+				{
+					XP += 20;
+				}
+
+				if(ship == "Катер")
+				{
+					XP += 30;
+				}
+				
+				if(ship == "Крейсер")
+				{
+					XP += 40;
+				}
+
+				if(ship == "Миноносец")
+				{
+					XP += 80;
+				}		
+			}
+
+			ShowStat();
+			Sleep(5000);
+	}
+
+	
+
+	
 };
 
 
@@ -164,87 +392,92 @@ public:
 int main()
 {
 	setlocale(LC_ALL, "Russian");
-	/*string Menu[3] = {"Создать новую лодку", "Продолжить сохраненную игру", "Выход"}, dir;
-	int pointer = 0;
+	
+	Submarine A;
+	int menu = 0;
+	string name;
+	//int maxhealth;
 
+
+	cout << "Главное меню:" << endl;
+	cout << "Выберите 1, что бы начать НОВУЮ ИГРУ." << endl;
+	cout << "Выберите 2, что бы ЗАГРУЗИТЬ сохраненную игру " << endl;
+	cout << "Выберите 3, что бы ВЫЙТИ" << endl;
+
+	cin >> menu;
+
+	do
+	{
+			switch (menu)
+			{
+			case 0:
+			case 1:
+				{
+				int c = 0;
+				cout << "1.Создать новую лодку" << endl;
+				cout << "2.Играть за Красный Октябрь" << endl;
+				cin >> c;
+					switch(c)
+					{
+					case 1:
+						cout << "Введите имя лодки: " << endl;
+						cin >> name;
+
+						A.setName(name);
+
+						
+
+						/*cout << "Введите максимальное значение жизней(не больше 200):" << endl;
+						cin >> maxhealth;
+						if(maxhealth > 200)
+						{
+							cout << "Вы задали не верное значение!" << endl;
+						}
+						else
+						{
+							A.setHealth(maxhealth) = maxhealth;
+							A.setMaxHealth(maxhealth) = 
+						}*/
+						
+						
+						
+					
+						 A.ShowStat();
+						break;
+					case 2:
+						break;
+				
+				
+					}
+				}
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+
+			default:
+				cout << "Вы ввели не верное значение, повторите!" << endl;
+				break;
+			}		
+		
+	}while(menu > 1 && menu < 3 );
 
 	while(true)
 	{
+		int ch = 0;
+		A.Sonar();
+		A.Move();
+		A.Attack();
+		A.Healing();
+		_getch();
 		system("cls");
-
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-
-		cout << "Choose menu - up, duwn.\t ENTER for apply\n\n";
-
-		for(int i = 0; i < 3; ++i)
-		{
-			if(i == pointer)
-			{
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
-				
-				cout << Menu[i] << endl;	
-			}
-			else{
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-
-				cout << Menu[i] << endl;
-			}
-		}
-
-		while(true)
-		{
-			if(GetAsyncKeyState(VK_UP) != 0)
-			{
-				pointer -= 1;
-				if(pointer == -1)
-				{
-					pointer = 2;		
-				}
-				break;	
-			}
-			else if(GetAsyncKeyState(VK_DOWN) != 0)
-			{
-				pointer += 1;
-				if(pointer == 3)
-				{
-					pointer = 0;				
-				}
-				break;
-			}
-
-			else if(GetAsyncKeyState(VK_RETURN) != 0)
-			{
-				switch(pointer)
-				{
-				case 0:
-					
-				
-				case 1:
-					
-				break;
-					 break;
-				
-				case 2:
-					{
-						return 0;
-					} break;
-				} break;
-			}
-		}
-
-		Sleep(150);
-	}*/
-
-	Submarine A;
-
-	//A.ShowStat();
-
-	A.Ships();
-
-
-
-
-
+		cout << "Что бы выйти, нажмите 1" << endl;
+		cin >> ch;
+		if(ch == 1)
+			break;
+		else continue;
+	}
 
 
 
